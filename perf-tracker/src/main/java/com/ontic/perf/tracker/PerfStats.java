@@ -1,5 +1,8 @@
 package com.ontic.perf.tracker;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author rajesh
  * @since 22/01/25 21:20
@@ -23,7 +26,8 @@ public class PerfStats {
     final Perf root;
     Perf current;
     short total;
-    short dbCalls;
+    private short dbCalls;
+    Map<String, Short> dbTypeVsCalls = new HashMap<>();
 
     private PerfStats(String heading) {
         this.heading = heading;
@@ -53,6 +57,19 @@ public class PerfStats {
             perfStatsHolder.remove();
         }
         root.end();
+    }
+
+    void incDbCalls(String dbType) {
+        dbCalls++;
+        dbTypeVsCalls.merge(dbType, (short) 1, (old, given) -> ++old);
+    }
+
+    public int dbCalls() {
+        return dbCalls;
+    }
+
+    public long timeTakenMillis() {
+        return root.totalTimeNanos / 1_000_000;
     }
 
     @Override

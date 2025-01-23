@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'co.ontic'
+group = 'com.ontic'
 version = '1.0'
 
 repositories {
@@ -26,3 +26,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+compileTestJava.ajc.options.aspectpath.from sourceSets.main.output

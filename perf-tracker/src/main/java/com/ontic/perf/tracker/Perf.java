@@ -54,14 +54,14 @@ public class Perf implements AutoCloseable {
         }
     }
 
-    public static Perf inDB(String tag) {
+    public static Perf inDB(String dbType, String tag) {
         try {
             PerfStats perfStats = perfStatsHolder.get();
             if (perfStats == null) {
                 return DUMMY;
             }
-            perfStats.dbCalls++;
-            return _safeIn(tag);
+            perfStats.incDbCalls(dbType);
+            return _safeIn(dbType + "_" + tag);
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
             return DUMMY;

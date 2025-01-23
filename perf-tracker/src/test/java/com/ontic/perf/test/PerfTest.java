@@ -1,15 +1,18 @@
-package com.ontic;
+package com.ontic.perf.test;
 
 import com.ontic.perf.aspect.Track;
 import com.ontic.perf.tracker.Perf;
 import com.ontic.perf.tracker.PerfStats;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author rajesh
- * @since 21/01/25 19:41
+ * @since 23/01/25 11:26
  */
-public class Main {
-    public static void main(String[] args) throws Exception {
+public class PerfTest {
+
+    @Test
+    public void testPerfStats() throws Exception {
         PerfStats perfStats = PerfStats.startNew("Testing");
         try {
             method1("aefsd");
@@ -17,56 +20,56 @@ public class Main {
             method2("aefsd", "knfkl", "jfbjkfb");
             method2("aefsd", "knfkl", "jfbjkfb");
             method2("aefsd", "knfkl", "jfbjkfb");
-            try (Perf ignored = Perf.inDB("mongo_db_collection")) {
+            try (Perf ignored = Perf.inDB("mongo", "db_collection")) {
                 Thread.sleep(100);
             }
-            try (Perf ignored = Perf.inDB("es_index")) {
+            try (Perf ignored = Perf.inDB("es", "index")) {
                 Thread.sleep(120);
             }
-            try (Perf ignored = Perf.inDB("mongo_db_collection")) {
+            try (Perf ignored = Perf.inDB("mongo", "db_collection")) {
                 Thread.sleep(100);
             }
-            try (Perf ignored = Perf.inDB("es_index")) {
+            try (Perf ignored = Perf.inDB("es", "index")) {
                 Thread.sleep(120);
             }
-            try (Perf ignored = Perf.inDB("mongo_db_collection")) {
+            try (Perf ignored = Perf.inDB("mongo", "db_collection")) {
                 Thread.sleep(100);
             }
-            try (Perf ignored = Perf.inDB("es_index")) {
+            try (Perf ignored = Perf.inDB("es", "es_index")) {
                 Thread.sleep(120);
             }
-//            nested(1);
+            nested(1);
         } finally {
             perfStats.stop();
         }
-        System.out.print(perfStats);
+        if (perfStats.dbCalls() > 2 || perfStats.timeTakenMillis() > 1000) {
+            System.out.print(perfStats);
+        }
         System.out.println("done");
     }
 
     @Track("m1")
-    private static void method1(String asd) throws Exception {
+    private void method1(String asd) throws Exception {
         System.out.println(asd);
         method3("m3", "afljf", "sldjkd");
     }
 
     @Track
-    private static void method2(String a, String b, String c) throws Exception {
+    private void method2(String a, String b, String c) throws Exception {
         System.out.println("method2 " + a + " " + b + " " + c);
         method3("m3", "afljf", "sldjkd");
         Thread.sleep(100);
     }
 
     @Track("m3")
-    private static void method3(String a, String b, String c) throws Exception {
+    private void method3(String a, String b, String c) throws Exception {
         System.out.println("method2 " + a + " " + b + " " + c);
         Thread.sleep(100);
     }
 
     @Track()
-    private static void nested(int i) throws Exception {
-        if (i > 993) {
-            return;
-        } else {
+    private void nested(int i) {
+        if (i <= 993) {
             nested(i + 1);
         }
     }
