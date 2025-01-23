@@ -1,4 +1,4 @@
-package co.ontic.perf.tracker;
+package com.ontic.perf.aspect;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -12,6 +12,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({METHOD})
 @Retention(RUNTIME)
-public @interface Perf {
+public @interface Track {
     String value() default "";
 }
