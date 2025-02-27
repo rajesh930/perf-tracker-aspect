@@ -16,6 +16,7 @@ public class PerfTest {
         PerfStats perfStats = PerfStats.startNew("Testing");
         try {
             method1("aefsd");
+            methodLight();
             method2("aefsd", "knfkl", "jfbjkfb");
             method2("aefsd", "knfkl", "jfbjkfb");
             method2("aefsd", "knfkl", "jfbjkfb");
@@ -52,6 +53,10 @@ public class PerfTest {
     private void method1(String asd) throws Exception {
         System.out.println(asd);
         method3("m3", "afljf", "sldjkd");
+    }
+
+    @Track
+    private void methodLight() {
     }
 
     @Track

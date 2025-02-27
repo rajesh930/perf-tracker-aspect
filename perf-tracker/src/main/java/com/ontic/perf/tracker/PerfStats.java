@@ -80,7 +80,7 @@ public class PerfStats {
                 .append(total >= Perf.MAX_NODES ? ", **Warning** too many nodes, perf stats may be wrong" : "")
                 .append('\n');
         if (root.children != null) {
-            for (Perf child : root.children) {
+            for (Perf child : root.children.values()) {
                 printTree(sb, child, 1);
             }
         }
@@ -95,7 +95,7 @@ public class PerfStats {
         if (perf.children == null) {
             return;
         }
-        for (Perf child : perf.children) {
+        for (Perf child : perf.children.values()) {
             printTree(sb, child, depth + 1);
         }
     }

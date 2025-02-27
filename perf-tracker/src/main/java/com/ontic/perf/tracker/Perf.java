@@ -3,6 +3,8 @@ package com.ontic.perf.tracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedHashMap;
+
 import static com.ontic.perf.tracker.PerfStats.perfStatsHolder;
 
 /**
@@ -26,7 +28,7 @@ public class Perf implements AutoCloseable {
 
     final String tag;
     final Perf parent;
-    Perf[] children;
+    LinkedHashMap<String, Perf> children;
     long lastInTime;
     long totalTimeNanos = 0;
     int calls = 0;
@@ -74,26 +76,14 @@ public class Perf implements AutoCloseable {
             return DUMMY;
         }
         Perf parent = perfStats.current;
-        Perf in = null;
         if (parent.children == null) {
+            parent.children = new LinkedHashMap<>();
+        }
+        Perf in = parent.children.get(tag);
+        if (in == null) {
             in = new Perf(tag, parent);
             perfStats.total++;
-            parent.children = new Perf[]{in};
-        } else {
-            for (Perf child : parent.children) {
-                if (child.tag.equals(tag)) {
-                    in = child;
-                    break;
-                }
-            }
-            if (in == null) {
-                Perf[] children = new Perf[parent.children.length + 1];
-                System.arraycopy(parent.children, 0, children, 0, parent.children.length);
-                in = new Perf(tag, parent);
-                perfStats.total++;
-                children[children.length - 1] = in;
-                parent.children = children;
-            }
+            parent.children.put(tag, in);
         }
         perfStats.current = in;
         in.start();
