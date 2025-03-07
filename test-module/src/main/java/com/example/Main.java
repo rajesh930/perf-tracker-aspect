@@ -92,7 +92,8 @@ public class Main {
     }
 
     @Track
-    private static void m13() {
+    private static String m13() {
         System.out.println("Hello world m3!");
+        return null;
     }
 }

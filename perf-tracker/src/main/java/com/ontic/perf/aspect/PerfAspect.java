@@ -13,10 +13,10 @@ import org.aspectj.lang.annotation.Aspect;
 public class PerfAspect {
 
     @Around("execution(* *(..)) && @annotation(track)")
-    public void track(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
+    public Object track(ProceedingJoinPoint joinPoint, Track track) throws Throwable {
         String tag = track.value().isEmpty() ? joinPoint.getSignature().toShortString() : track.value();
         try (Perf ignored = Perf.in(tag)) {
-            joinPoint.proceed();
+            return joinPoint.proceed();
         }
     }
 }
